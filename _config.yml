@@ -26,7 +26,7 @@ archive_dir: archives
 category_dir: categories
 code_dir: downloads/code
 i18n_dir: :lang
-skip_render:
+skip_render: [baidu_verify_SEJ6lsk01e.html,google3f06b54c01a92e3e.html]
 
 # Writing
 new_post_name: :title.md # File name of new posts
@@ -91,6 +91,16 @@ pagination_dir: page
 disqus_shortname:
 
 rss: /atom.xml
+
+sitemap:
+  path: sitemap.xml
+baidusitemap:
+  path: baidusitemap.xml
+
+feed:
+    type: atom
+    path: atom.xml
+    limit: 100
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/
