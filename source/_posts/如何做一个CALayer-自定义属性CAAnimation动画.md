@@ -31,7 +31,7 @@ CALayer和CAAnimation都是符合键值编码的容器类（Key-Value Coding Com
 
 因此，在CALayer中，用@dynamic修饰的属性，即使没有实现setter getter也不会崩溃。
 
-```
+```objectivec
 @interface DynamicTest : CALayer
 @property NSString *title;
 @end
@@ -70,7 +70,7 @@ Core Animation动画也是这个原理，在Core Animation动画过程中，不�
 
 3.@synthesize修饰或不加修饰词的@property属性，需要重写`-initWithLayer:`方法，手动将属性赋值给副本对象。如果没有这样的属性，或属性不影响显示，此方法不重写也可以。
 
-```
+```objectivec
 /* This initializer is used by CoreAnimation to create shadow copies of
  * layers, e.g. for use as presentation layers. Subclasses can override
  * this method to copy their instance variables into the presentation
@@ -94,7 +94,7 @@ Core Animation动画也是这个原理，在Core Animation动画过程中，不�
 
 接下来要添加一个很重要的类方法`+needsDisplayForKey:`
 
-```
+```objectivec
 //Layer初次加载时，会调用此方法，用来判断属性的值改变时，是否需要重新绘制。因此自定义属性动画必须实现此方法且返回YES
 //实现此方法后，自定义属性的值一旦改变,便会自动调用setNeedsDisplay，触发重绘。
 + (BOOL)needsDisplayForKey:(NSString *)key {
@@ -118,7 +118,7 @@ Core Animation动画也是这个原理，在Core Animation动画过程中，不�
 
 绘制代码完成后，就可以使用动画了，添加[动画代码](https://github.com/lengain/LNLoadingLayer/blob/master/LNLoadingLayer/ViewController.m)
 
-```
+```objectivec
     LNLoadingExplicitLayer *loadingLayer = [[LNLoadingExplicitLayer alloc] init];
     loadingLayer.frame = frame;
     loadingLayer.progressLineWidth = 6.f/[UIScreen mainScreen].scale;
@@ -144,7 +144,7 @@ Core Animation动画也是这个原理，在Core Animation动画过程中，不�
 
 在demo的`LNLoadingExplicitLayer`类中，只实现了基本的显式动画。当我们想要在改变属性值自动有个过渡动画时，便要再添加一个方法`actionForKey:` ,这里是[示例代码](https://github.com/lengain/LNLoadingLayer/blob/master/LNLoadingLayer/LNLoadingLayer.m)，当layer属性改变时，layer都会寻找合适的action来实行这个改变，`actionForKey:`便是指定属性默认隐式动画的方法。
 
-```
+```objectivec
 - (id)actionForKey:(NSString *)event {
     if ([event isEqualToString:LNProgressKey]) {
         CABasicAnimation *actionAnimation = [CABasicAnimation animationWithKeyPath:CustomPropertyName];
