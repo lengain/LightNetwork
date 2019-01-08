@@ -8,8 +8,7 @@ menu:
 # SubNav
 subnav:
   github: "https://github.com/lengain"
-  rss: /atom.xml
-  zhihu: "https://www.zhihu.com/people/tong-yu-long-48/activities"
+  #zhihu: "https://www.zhihu.com/people/tong-yu-long-48/activities"
   #qq: "#"
   #weixin: "#"
   jianshu: "https://www.jianshu.com/u/830f2328d296"
@@ -17,7 +16,8 @@ subnav:
   #segmentfault: "#"
   #bilibili: "#"
   #acfun: "#"
-  #mail: "mailto:litten225@qq.com"
+  mail: "mailto:lengain@yeah.net"
+  rss: /atom.xml
   #facebook: "#"
   #google: "#"
   #twitter: "#"
