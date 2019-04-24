@@ -5,8 +5,6 @@ date: 2019-04-24 11:14:47
 tags: 随笔
 ---
 
-
-
 配置：Mac Pro 2015 13英寸
 
 型号：A1502
@@ -47,8 +45,20 @@ Mac Pro ME253 MD878,iMAC A1419(Late 2013 and newer).
 
 2013 2014 2015 1016 2017版27寸iMAC A1419
 
+
+
 #### 目标
 
 将128G硬盘，换为512G硬盘
 
-参考：
+更换的过程主要是参考网友`late哥哥`的[MacBook Pro 2015 mid ssd存储升级扩容需求以及解决方案]([https://blog.csdn.net/qq_28029345/article/details/85262542](https://blog.csdn.net/qq_28029345/article/details/85262542))
+
+Mac OS最近几年的版本，都不支持安装包的直接下载，而是直接调起App Stroe，因此只能在网上找资源了，这是我找到的一个Install macOS Mojave 10.14的下载地址，直接打开安装，或者制作启动U盘安装，都可以。
+
+Install macOS Mojave 10.14.dmg软件下载[https://pan.baidu.com/s/1Tz86rXPTLjaHid1tsPx_MA](https://pan.baidu.com/s/1Tz86rXPTLjaHid1tsPx_MA)密码d5n2
+
+安装成功之后，可以首先升级一下系统。目前最新版是 `macOS Mojave10.14.4`
+
+
+
+
