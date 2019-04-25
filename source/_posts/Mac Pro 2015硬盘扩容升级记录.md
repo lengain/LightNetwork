@@ -21,6 +21,22 @@ tags: 随笔
 
 #### 资料整理
 
+硬盘的选择还是综合下价格和性能的考虑。
+
+- 最优的是原装配件的Apple SSD，厂家是三星的。512G硬盘的淘宝价格大概1800软妹币。支持双系统。
+
+- 东芝XG5 M.2 PCIE NVMe M2系列固态硬盘，512G硬盘价格大概在1100软妹币。支持双系统（[案例]([https://bbs.feng.com/read-htm-tid-11795599.html](https://bbs.feng.com/read-htm-tid-11795599.html)）。需要硬盘转接卡。
+
+- 三星SM951 PCIE NVMe M2系列固态硬盘，512G硬盘大概750软妹币左右。论坛有人说不支持双系统。需要硬盘转接卡。
+
+- Intel 760P PCIE NVMe M2系列固态硬盘。512G硬盘大概600软妹币左右。论坛有人说不支持双系统。需要硬盘转接卡。
+
+- 其他NVME硬盘也可以。但是尽量选择大厂硬盘，质量有所保障。
+
+我不需要安装双系统，东芝XG5，三星951和英特尔760P性能相差不大，我对三星无感，因此选择了Intel 760P。
+
+因为Apple SSD硬盘卡接口和NVMe硬盘卡接口不一致，所以只能使用硬盘转接卡。英特尔760P装上硬盘转接卡后，长度和Apple SSD一样。
+
 我在买硬盘转接卡的时候，看到商品详情里表明了一些可以更换硬盘的mac版本，如下：
 
 2013 version MacBook Pro retina A1398 A1502 (ME864 ME865 ME866 ME293 ME294)
@@ -45,13 +61,11 @@ Mac Pro ME253 MD878,iMAC A1419(Late 2013 and newer).
 
 2013 2014 2015 1016 2017版27寸iMAC A1419
 
-
-
 #### 目标
 
 将128G硬盘，换为512G硬盘
 
-更换的过程主要是参考网友`late哥哥`的[MacBook Pro 2015 mid ssd存储升级扩容需求以及解决方案]([https://blog.csdn.net/qq_28029345/article/details/85262542](https://blog.csdn.net/qq_28029345/article/details/85262542))
+更换的过程主要是参考网友`late哥哥`的[MacBook Pro 2015 mid ssd存储升级扩容需求以及解决方案](https://blog.csdn.net/qq_28029345/article/details/85262542)
 
 Mac OS最近几年的版本，都不支持安装包的直接下载，而是直接调起App Stroe，因此只能在网上找资源了，这是我找到的一个Install macOS Mojave 10.14的下载地址，直接打开安装，或者制作启动U盘安装，都可以。
 
@@ -59,6 +73,12 @@ Install macOS Mojave 10.14.dmg软件下载[https://pan.baidu.com/s/1Tz86rXPTLjaH
 
 安装成功之后，可以首先升级一下系统。目前最新版是 `macOS Mojave10.14.4`
 
+#### 问题
 
+如果遇到翻盖启动时，重新启动加载或休眠问题，可以试试重置了smc或nvram。
 
+又重新重置了smc
 
+关机，按下键盘左侧的shift + control +  option，然后同时按下电源按钮，按住10秒钟，松开所有案件，然后重启。
+
+以及nvram（pram）将mac关机，然后按下 option + command + p + r ，按住大约20秒松开，期间大致会重启两次，然后松开。
