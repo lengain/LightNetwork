@@ -61,7 +61,7 @@ Mac Pro ME253 MD878,iMAC A1419(Late 2013 and newer).
 
 2013 2014 2015 1016 2017版27寸iMAC A1419
 
-#### 目标
+#### 准备
 
 将128G硬盘，换为512G硬盘
 
@@ -72,6 +72,18 @@ Mac OS最近几年的版本，都不支持安装包的直接下载，而是直�
 Install macOS Mojave 10.14.dmg软件下载[https://pan.baidu.com/s/1Tz86rXPTLjaHid1tsPx_MA](https://pan.baidu.com/s/1Tz86rXPTLjaHid1tsPx_MA)密码d5n2
 
 安装成功之后，可以首先升级一下系统。目前最新版是 `macOS Mojave10.14.4`
+
+#### 步骤
+
+###### 1.拆机
+
+###### 1.拆机
+
+###### 1.拆机
+
+###### 1.拆机
+
+###### 1.拆
 
 #### 问题
 
