@@ -9,6 +9,16 @@ tags: 随笔
 
 #### 起因
 
+> ###### 我的Mac信息
+> 
+> 配置：Mac Pro 2015 13英寸
+> 
+> 型号：A1502
+> 
+> 内存：8G
+> 
+> 硬盘：128G Apple SSD
+
 我是2015年下半年买的这款Mac，如今19年四月份，已经将近四年了，电脑一般的寿命是五年左右，超过五年的电脑，一般都有各种元器件老化的问题，要换零件才能继续使用。我这电脑坚挺了近四年，没有坏过一次。想着明年准备换台新电脑，在换电脑以前，也想让它发挥一下余热。我这款Mac的硬盘是128G，作为iOSer，Xcode的一个软件，占用将近60G左右，还不包扩各种工程文件，其他软件。所以，内存紧张的问题困扰我也有一段时间了，因此这次准备换一下硬盘，将硬盘升级到512G。
 
 其实也想加一个内存条，但是这款Mac的内存条已经焊接在主板上了，无法增加。
@@ -33,53 +43,64 @@ tags: 随笔
 
 我在买硬盘转接卡的时候，看到商品详情里表明了一些可以更换硬盘的mac版本，如下：
 
-2013 version MacBook Pro retina A1398 A1502 (ME864 ME865 ME866 ME293 ME294)
+> 2013 version MacBook Pro retina A1398 A1502 (ME864 ME865 ME866 ME293 ME294)
+> 
+> 2014 version MacBook Pro retina A1502 A1398 (MGX72 MGX82 MGX92 MGXA2 MGXC2)
+> 
+> 2015 version MacBook Pro retina A1502 A1398(MF839 MF840 MF841 MJLU2 MJLT2 MJLQ2)
+> 
+> 2013-2014 version MacBook Air A1465 A1466(MD711 MD712 MD760 MD761)
+> 
+> 2015 version MacBook Air A1465 A1466(MJVM2 MJVP2 MJVE2 MJVG2)
+> 
+> 2017 version MacBook Air A1466(MQD32 MQD42 MQD52 EMC3178)
+> 
+> Mac Pro ME253 MD878,iMAC A1419(Late 2013 and newer).
+> 
+> 2014版Mac mini A1347
+> 
+> 2013版苹果一体机iMAC A1418
+> 
+> 2017版iMAC A1418
+> 
+> 2013 2014 2015 1016 2017版27寸iMAC A1419
 
-2014 version MacBook Pro retina A1502 A1398 (MGX72 MGX82 MGX92 MGXA2 MGXC2)
+#### 方案
 
-2015 version MacBook Pro retina A1502 A1398(MF839 MF840 MF841 MJLU2 MJLT2 MJLQ2)
+###### 1.最优方案
 
-2013-2014 version MacBook Air A1465 A1466(MD711 MD712 MD760 MD761)
+- 使用`TimeMachine`备份到新硬盘作为备份盘。备份盘可以选择机械硬盘，没有太高的要求，空间只要比电脑已使用空间大一些就行。备份盘格式为Mac os 扩展(日志式)，如果不是，可以打开磁盘工具，抹掉重新格式化一下，然后再使用`TimeMachine`备份到磁盘。
+- 将新的SSD放到硬盘盒，然后连接电脑，格式化，格式为Mac os 扩展(日志式)，名字建议改为`Macintosh`,因为原系统的硬盘名字为`Macintosh HD`，其实新硬盘名字和旧的一样也行。
+- 备份盘也连接电脑，重启Mac，按住option，稍等片刻，选择备份盘，然后将备份恢复到新硬盘就行了。
+- 然后更换新SSD到Mac上就行了。
 
-2015 version MacBook Air A1465 A1466(MJVM2 MJVP2 MJVE2 MJVG2)
+优点：操作简单，数据不会丢失，软件不需要重装。
 
-2017 version MacBook Air A1466(MQD32 MQD42 MQD52 EMC3178)
+###### 2.第二方案
 
-Mac Pro ME253 MD878,iMAC A1419(Late 2013 and newer).
 
-2014版Mac mini A1347
-
-2013版苹果一体机iMAC A1418
-
-2017版iMAC A1418
-
-2013 2014 2015 1016 2017版27寸iMAC A1419
-
-###### 我的Mac信息
-
-配置：Mac Pro 2015 13英寸
-
-型号：A1502
-
-内存：8G
-
-硬盘：128G Apple SSD
 
 #### 准备
 
-准备软件：
+###### 软件
 
 我的更换的过程主要是参考网友`late哥哥`的[MacBook Pro 2015 mid ssd存储升级扩容需求以及解决方案](https://blog.csdn.net/qq_28029345/article/details/85262542)
 
-Mac OS最近几年的版本，都不支持安装包的直接下载，而是直接调起App Stroe，因此只能在网上找资源了，这是我找到的一个Install macOS Mojave 10.14的下载地址，直接打开安装，或者制作启动U盘安装，都可以。
+Mac OS最近几年的版本，都不支持安装包的直接下载，而是直接调起App Store，因此只能在网上找资源了，据说可以从`MAS`下载系统安装包。这是我找到的一个Install macOS Mojave 10.14的下载地址，直接打开安装，或者制作启动U盘安装，都可以。
 
 Install macOS Mojave 10.14.dmg软件下载[https://pan.baidu.com/s/1Tz86rXPTLjaHid1tsPx_MA](https://pan.baidu.com/s/1Tz86rXPTLjaHid1tsPx_MA)密码`d5n2`
 
-准备硬件：
+###### 硬件
 
 1. 硬盘。选择合适的硬盘，512G或1T SSD硬盘卡。
 
 2. 拆机工具。如果只更换硬盘的话，只需要准备5星和6星的螺丝刀。五星螺丝刀用来拆Mac后壳，六星螺丝刀用来拆硬盘。**注意：**拆卸时，螺丝刀顺时针是拧紧，逆时针是拆下。切记不可太过用力，容易损坏螺丝。
+
+3. Mac SSD或NVMe硬盘盒。用硬盘盒的目的就是在更换硬盘之前，将mac os安装到硬盘上，这样，换过硬盘就直接能使用了。
+
+4. NVMe M.2转mac ssd转接卡。如果你买的是Mac SSD就无需转接卡了。
+
+5. 静电手环。非必须。
 
 安装成功之后，可以首先升级一下系统。目前最新版是 `macOS Mojave10.14.4`
 
@@ -91,7 +112,9 @@ Install macOS Mojave 10.14.dmg软件下载[https://pan.baidu.com/s/1Tz86rXPTLjaH
 
 ###### 1.拆机
 
-###### 1.拆机
+###### 1.更换
+
+这里我找到一个[更换视频](https://cloud.video.taobao.com/play/u/2551849822/p/2/e/6/t/1/221280457504.mp4?appKey=7596)，可以观看一下
 
 ###### 1.拆
 
