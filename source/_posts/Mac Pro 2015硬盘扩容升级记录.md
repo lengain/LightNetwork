@@ -78,13 +78,13 @@ tags: 随笔
 
 ###### 2.第二方案
 
-1.  下载macOS Mojave或macOS Sierra安装包（下面有下载地址），打开dmg镜像，将安装程序，拖到应用程序文件夹，准备一个大于安装包大小的U盘，16就足够了。格式化为Mac os 扩展(日志式)，然后看这个教程[https://www.iplaysoft.com/macos-usb-install-drive.html](https://www.iplaysoft.com/macos-usb-install-drive.html)，将优盘制作成启动盘，教程最下面，也有安装办法，只不过，安装的话，要安装到新硬盘上。
+1. 下载macOS Mojave或macOS Sierra安装包（下面有下载地址），打开dmg镜像，将安装程序，拖到应用程序文件夹，准备一个大于安装包大小的U盘，16就足够了。格式化为Mac os 扩展(日志式)，然后看这个教程[https://www.iplaysoft.com/macos-usb-install-drive.html](https://www.iplaysoft.com/macos-usb-install-drive.html)，将优盘制作成启动盘，教程最下面，也有安装办法，只不过，安装的话，要安装到新硬盘上。
 
 2. 将新的SSD放到硬盘盒，然后连接电脑，格式化，格式为Mac os 扩展(日志式)，名字建议改为`Macintosh`,因为原系统的硬盘名字为`Macintosh HD`，其实新硬盘名字和旧的一样也行。
 
 3. 将启动U盘和新SSD一同连接电脑，重启Mac，按住option，稍等片刻，等到启动U盘和新SSD都出现后，选择启动U盘，将系统安装到新SSD上。
 
-4- 然后更换新SSD到Mac上就行了。
+4. 然后更换新SSD到Mac上就行了。
 
 优点：启动优盘制作后，以后可以一直用。新系统全新，相当于换了一个新电脑。缺点就是所有东西都要重新安装。
 
