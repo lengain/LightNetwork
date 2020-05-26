@@ -1,8 +1,7 @@
 ---
 title: iOS那些事儿（一）
 date: 2019-03-29 09:52:58
-tags:技术
-categories:
+tags: 技术
 ---
 
 ### 前言
@@ -46,5 +45,3 @@ $ ./dsc_extractor ./dyld_shared_cache_arm64 ./
 【参考文献】
 
 \[1] dyld详解 https://www.dllhook.com/post/238.html \[EB/OL].
-
-

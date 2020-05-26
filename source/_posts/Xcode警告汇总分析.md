@@ -2,7 +2,6 @@
 title: Xcode警告汇总分析
 date: 2019-01-05 20:10:47
 tags: 技术
-categories:
 ---
 
 Xcode工程警告在我们工作中经常遇到，却又常常忽略的。正确的处理Xcode警告可以使得我们开发出优秀的程序。而在实际开发过程中，我们有可能因为项目紧，开发周期短而忽视掉一些警告。本文旨在分析Xcode工程中的各种警告，并根据警告部分的程序对工程影响程度的大小，进行排序，然后提醒开发者，及时处理对工程影响较大的警告。
@@ -135,7 +134,7 @@ app icon is required for iPad/iPhone apps targeting IOS 7.0 and later
 
 * Logic error（逻辑错误）
 
-*  Dead Store（无作用存储体）
+* Dead Store（无作用存储体）
 
 * Leak（内存泄漏）
 

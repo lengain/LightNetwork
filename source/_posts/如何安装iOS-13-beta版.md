@@ -2,7 +2,6 @@
 title: 如何安装iOS 13 beta版
 date: 2019-06-14 14:24:26
 tags: 技术
-categories:
 ---
 
 最近，[Apple发布iOS 13 预览版](https://www.apple.com/cn/newsroom/2019/06/apple-previews-ios-13/) 支持深色模式，优化了照片与相机功能，还有输入法的升级等。
@@ -22,7 +21,7 @@ categories:
 | iPhone SE                   | iPad Air 2/3rd              |
 | iPod touch (7th generation) |                             |
 
- <!-- more -->
+<!-- more -->
 
 ##### 升级前准备
 

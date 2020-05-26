@@ -58,7 +58,7 @@ index_generator:
 ## 1: Disable pagination
 ## 0: Fully Disable
 archive: 1
-category: 1
+#category: 1
 tag: 1
 
 
