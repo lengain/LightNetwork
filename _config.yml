@@ -8,7 +8,7 @@ subtitle: 生命不息，奋斗不止
 description: Lengain的博客,主要包括技术,生活感悟等,现就职于顺联动力.
 keywords: "iOS,开发者,程序员,编程,代码,开源,cocoaChina,Developer,Programmer,Coder,Geek"
 author: Lengain
-language: zh-CN
+language: zh-Hans
 email: lengain@yeah.net
 favicon: /favicon.ico
 
@@ -62,6 +62,13 @@ category: 1
 tag: 1
 
 
+# 搜索
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
+
 # Server
 ## Hexo uses Connect as a server
 ## You can customize the logger format as defined in
@@ -112,7 +119,7 @@ feed:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: yilia
+theme: next
 
 jsonContent:
     meta: false
