@@ -64,10 +64,10 @@ footer:
     color: "#ff0000"
 
   # If not defined, `author` from Hexo `_config.yml` will be used.
-  copyright:
+  copyright: lengain.github.io
 
   # Powered by Hexo & NexT
-  powered: true
+  powered: false
 
   # Beian ICP and gongan information for Chinese users. See: http://www.beian.miit.gov.cn, http://www.beian.gov.cn
   beian:
@@ -194,35 +194,10 @@ social_icons:
   icons_only: false
   transition: false
 
-# Post wordcount display settings
-# Dependencies: https://github.com/willin/hexo-wordcount
-post_wordcount:
-  item_text: true
-  wordcount: true
-  min2read: true
-  totalcount: true
-  separated_meta: true
-
-# Gitment
-# Introduction: https://imsun.net/posts/gitment-introduction/
-# You can get your Github ID from https://api.github.com/users/<Github username>
-gitment:
-  enable: true
-  mint: true # RECOMMEND, A mint on Gitment, to support count, language and proxy_gateway
-  count: true # Show comments count in post meta area
-  lazy: false # Comments lazy loading with a button
-  cleanly: false # Hide 'Powered by ...' on footer, and more
-  language: # Force language, or auto switch by theme
-  github_user: lengain # MUST HAVE, Your Github ID
-  github_repo: gitment-comments # MUST HAVE, The repo you use to store Gitment comments
-  client_id: Iv1.42855feb134100e7 # MUST HAVE, Github client id for the Gitment
-  client_secret: 31159f544cafe90c7c68ee9aba474913daed2f02 # EITHER this or proxy_gateway, Github access secret token for the Gitment
-  proxy_gateway: # Address of api proxy, See: https://github.com/aimingoo/intersect
-  redirect_protocol: # Protocol of redirect_uri with force_redirect_protocol when mint enabled
 
 # Blog rolls
 links_settings:
-  icon: fa fa-link
+  icon: fa fa-book
   title: Links
   # Available values: block | inline
   layout: block
@@ -275,8 +250,8 @@ post_meta:
   item_text: true
   created_at: true
   updated_at:
-    enable: true
-    another_day: true
+    enable: false
+    another_day: false
   categories: true
 
 # Post wordcount display settings
@@ -285,9 +260,6 @@ symbols_count_time:
   separated_meta: true
   item_text_post: true
   item_text_total: false
-  awl: 2                   # Average Word Length
-  wpm: 275                 # Words Per Minute（每分钟阅读词数）
-  suffix: mins.
 
 # Use icon instead of the symbol # to indicate the tag at the bottom of the post
 tag_icon: false
@@ -312,7 +284,7 @@ follow_me:
   #Twitter: https://twitter.com/username || fab fa-twitter
   #Telegram: https://t.me/channel_name || fab fa-telegram
   #WeChat: /images/wechat_channel.jpg || fab fa-weixin
-  RSS: /atom.xml || fa fa-rss
+  #RSS: /atom.xml || fa fa-rss
 
 # Related popular posts
 # Dependencies: https://github.com/tea3/hexo-related-popular-posts
@@ -377,7 +349,7 @@ text_align:
   mobile: justify
 
 # Reduce padding / margin indents on devices with narrow width.
-mobile_layout_economy: false
+mobile_layout_economy: true
 
 # Android Chrome header panel color ($brand-bg / $headband-bg => $black-deep).
 android_chrome_color: "#222"
@@ -443,7 +415,7 @@ github_banner:
 # ---------------------------------------------------------------
 
 font:
-  enable: false
+  enable: ture
 
   # Uri of fonts host, e.g. https://fonts.googleapis.com (Default).
   host:
@@ -457,7 +429,7 @@ font:
   global:
     external: true
     family: Lato
-    size:
+    size: 0.9
 
   # Font settings for site title (.site-title).
   title:
@@ -668,17 +640,34 @@ livere_uid: # <your_uid>
 # Gitalk
 # For more information: https://gitalk.github.io, https://github.com/gitalk/gitalk
 gitalk:
-  enable: false
-  github_id: # GitHub repo owner
-  repo: # Repository name to store issues
-  client_id: # GitHub Application Client ID
-  client_secret: # GitHub Application Client Secret
-  admin_user: # GitHub repo owner and collaborators, only these guys can initialize gitHub issues
-  distraction_free_mode: true # Facebook-like distraction free mode
+  enable: true
+  github_id: lengain
+  repo: gitment-comments
+  client_id: Iv1.42855feb134100e7
+  client_secret: 31159f544cafe90c7c68ee9aba474913daed2f02
+  admin_user: lengain
+  distraction_free_mode: true
   # Gitalk's display language depends on user's browser or system environment
   # If you want everyone visiting your site to see a uniform language, you can set a force language value
   # Available values: en | es-ES | fr | ru | zh-CN | zh-TW
-  language:
+  language: zh-CN
+
+# Gitment
+# Introduction: https://imsun.net/posts/gitment-introduction/
+# You can get your Github ID from https://api.github.com/users/<Github username>
+gitment:
+  enable: false
+  mint: true # RECOMMEND, A mint on Gitment, to support count, language and proxy_gateway
+  count: true # Show comments count in post meta area
+  lazy: false # Comments lazy loading with a button
+  cleanly: false # Hide 'Powered by ...' on footer, and more
+  language: # Force language, or auto switch by theme
+  github_user: lengain # MUST HAVE, Your Github ID
+  github_repo: gitment-comments # MUST HAVE, The repo you use to store Gitment comments
+  client_id: Iv1.42855feb134100e7 # MUST HAVE, Github client id for the Gitment
+  client_secret: 31159f544cafe90c7c68ee9aba474913daed2f02 # EITHER this or proxy_gateway, Github access secret token for the Gitment
+  proxy_gateway: # Address of api proxy, See: https://github.com/aimingoo/intersect
+  redirect_protocol: # Protocol of redirect_uri with force_redirect_protocol when mint enabled
 
 
 # ---------------------------------------------------------------
@@ -763,7 +752,7 @@ busuanzi_count:
 # Algolia Search
 # For more information: https://www.algolia.com
 algolia_search:
-  enable: true
+  enable: false
   hits:
     per_page: 10
   labels:
