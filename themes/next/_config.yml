@@ -447,6 +447,7 @@ font:
   posts:
     external: true
     family:
+    size: 0.875
 
   # Font settings for <code> and code blocks.
   codes:
@@ -640,7 +641,7 @@ livere_uid: # <your_uid>
 # Gitalk
 # For more information: https://gitalk.github.io, https://github.com/gitalk/gitalk
 gitalk:
-  enable: true
+  enable: false
   github_id: lengain
   repo: gitment-comments
   client_id: Iv1.42855feb134100e7
