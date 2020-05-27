@@ -1,8 +1,9 @@
-# <div align="center"><a href="https://github.com/iissnan/hexo-theme-next"><img align="center" width="56" height="56" src="../../blob/master/source/images/logo.svg"></a> e x T</div>
+<h1 align="center">本项目已停止维护。:warning:</h1>
+<h2 align="center">社区维护的版本请移步这里：<a href="https://github.com/theme-next/hexo-theme-next">NexT v6 and v7 :triangular_flag_on_post:</a></h2>
+
+<h1 align="center">NexT</h1>
 
 <p align="center">NexT 是一个高质量并且优雅的<a href="http://hexo.io">Hexo</a> 主题。这是精心制作做出来的 hexo 主题。</p>
-
-![NexT Schemes](http://iissnan.com/nexus/next/next-schemes.jpg)
 
 [![Join the chat at https://gitter.im/iissnan/hexo-theme-next](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/iissnan/hexo-theme-next?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![mnt-image]][commits-url]
@@ -16,10 +17,10 @@
 ## 实时预览 Live Preview
 
 
-* :heart_decoration: Muse 方案: [XiaMo](https://notes.wanghao.work) | [OAwan](https://oawan.me) | [Hui Wang](http://hui-wang.info)
+* :heart_decoration: Muse 方案: [LEAFERx](https://leaferx.online) | [XiaMo](https://notes.wanghao.work) | [OAwan](https://oawan.me)
 * :six_pointed_star: Mist 方案: [Jeff](https://blog.zzbd.org) | [uchuhimo](http://uchuhimo.me) | [xirong](http://www.ixirong.com)
 * :pisces: Pisces 方案: [Vi](http://notes.iissnan.com) | [Acris](https://acris.me) | [Rainy](https://rainylog.com)
-* :gemini: Gemini 方案: [Ivan.Nginx](https://almostover.ru) | [Alynx](http://sh.alynx.xyz) | [Raincal](https://raincal.top)
+* :gemini: Gemini 方案: [Ivan.Nginx](https://almostover.ru) | [Raincal](https://raincal.com) | [Dandy](https://dandyxu.me)
 
 
 更多 NexT 例子点击 [这里](https://github.com/iissnan/hexo-theme-next/issues/119).
@@ -109,9 +110,9 @@
 **3.** 在 **hexo 根目录下** 的配置文件`_config.yml`里设置主题:
 
     theme: next
-    
+
 ### Bugs
-对于那些遇到 **Error: Cannot find module 'hexo-util'** [问题](https://github.com/iissnan/hexo-theme-next/issues/1490)的人, 请检查你的NPM 版本. 
+对于那些遇到 **Error: Cannot find module 'hexo-util'** [问题](https://github.com/iissnan/hexo-theme-next/issues/1490)的人, 请检查你的NPM 版本.
 
 - `版本 > 3`: 如果仍然不行的话，请移除 `node_modules` 文件 然后重新安装，使用 `npm install`命令。
 - `版本 < 3`: 请通过`npm install --save-dev hexo-util`命令添加`hexo-util`到你的站点包依赖里
@@ -157,9 +158,9 @@ $ git pull
 4. 使用 `--config source/_data/next.yml` 参数启动服务器, 生成或者部署。\
    例如: `hexo clean --config source/_data/next.yml && hexo g --config source/_data/next.yml`。
 
-## 特色 Features 
+## 特色 Features
 
-### 支持多国语言, 包括: 
+### 支持多国语言, 包括:
 :cn: 简体中文 & 繁体中文<br>
 :us: 英语<br>
 :ru: 俄语<br>
