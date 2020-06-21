@@ -3,8 +3,6 @@ title: 关于应用“简图”的UI和交互设计
 tags: 软件
 ---
 
-
-
 ### 2020年6月19日
 
 上段时间在考虑应用的名字，确定好叫`简图`之后我就开始了开发的工作。
@@ -25,8 +23,6 @@ tags: 软件
 
 ![图2](https://raw.githubusercontent.com/lengain/LengainGraphBed/master/picture/2020-06-19%2023.26.48.gif)
 
-
-
 而不带3D Touch的手机则没有任何操作，如果要操作相片，要单击进入详情页操作。如下图：
 
 ![图3](https://raw.githubusercontent.com/lengain/LengainGraphBed/master/picture/seno3dtouch.gif)
@@ -41,8 +37,10 @@ tags: 软件
 
 - 账号显示页面有添加账号按钮
 
-- 点击后弹出选择账号平台（目前只有一个Github，暂时不做）
+- 点击按钮后弹出选择账号平台的页面（目前只有一个Github，暂时不做）
+
+- 编辑添加账号
 
 - 添加后的账号显示页面可直观的显示当前账号，并且易于切换账号。
 
-
+有些事情想不好怎么做，就放一放，可能会在哪个阳光温暖的午后，就突然想起来了。
