@@ -44,8 +44,6 @@ UIView有以下属性：
 
 ![](给设计师的iOS-UI介绍/snapshot2020-09-30.png)
 
-
-
 ##### 各种控件
 
 以下控件都是继承于UIView，即UIView有的属性，它们也都有，同时它们也有UIView没有的特性。
@@ -62,8 +60,6 @@ UIView有以下属性：
 
 `UIPageControl`为页码控制器，通常用于指示轮播图的位置，控制器的指示视图默认为圆点。开发者可自定义页码控制器上指示视图（即上图中页面Page Control，小圆点）的图片。上图右侧图Custom Page Control为自定义指示视图的页面。
 
-
-
 **UISearchBar**
 
 `UISearchBar`为搜索框， 下图Default Search Bar中展示的即是。搜索框可自定义搜索图标🔍的图片，以及文本的字体大小颜色，取消按钮的文本，样式等，Scope范围的设置为可选项。
@@ -74,27 +70,39 @@ UISearchBar和列表视图放在一起时，再搭配UISearchController，可以
 
 **UISegmentView**为分段控制器，分段控制器可以自定义各种样式，如上图Segmented Contols。开发者可以设置分段控制器按钮的背景色，选中色，甚至可以将按钮设置为图片。分段控制器通常放在页面的导航栏区域，用来分页或者分类数据，在iPhone->最近通话的导航栏区域可看到。
 
-**UISlider**为滑块，由一个进度条和拇指可拖动视图（小圆点）组成，如上图Siders中展示的那样。开发者可以自定义滑块进图条的前景色，背景色，粗细，也可以设置拇指视图的大小颜色，样式。
+**UISlider**为滑块，由一个进度条和拇指可拖动视图（小圆点）组成，如上图Siders中展示的那样。开发者可以自定义滑块进图条的前景色，背景色，粗细，也可以设置拇指视图（圆点）的大小颜色，样式。
+
+
+
+**UIStepper**为步进器，UI样式如下图，常用于一些较小数值值的加减操作，典型场景打印页面的页数。开发者可自定义背景色，左右加减符号的图片，分割线的图片，加减值的大小。
+
+**UISwitch**为开关。常用于设置页面某项设置的开关。
 
 ![3](给设计师的iOS-UI介绍/3.png)
 
+**UITextField**为单行输入框，常用于输入用户名，密码，或搜索。开发者可设置占位文本用于提醒，每个UITextField有左右视图，默认不显示，开发者可自定义显示，比如上图中第四个UITextField，设置了左右两个视图，开发者可设置文本大小，字体，颜色，是否是密码输入（即输入后变为黑点），视图背景色等，不过不能换行。
 
+**UITextView**为多行输入框。常用于输入较长的文本。UITextView的属性比UITextField少一些。开发者可设置文本大小，字体，颜色，不支持密文输入，支持富文本编辑，插入图片（自定义表情）等，Apple的Demo中没有UITextView的示例，你可以参考微信朋友圈发布新内容时的输入框。
 
-
+**UIActivityIndicatorView**是活动指示器，如下图，通常用于表示页面加载中。
 
 ![4](给设计师的iOS-UI介绍/4.png)
 
-
+**UIAlertController**是警告框。警告框有两种样式，一种是在屏幕中间的，如上图，可以自定义左右两边的按钮，也可以在警告框中添加单行输入框。另一种是动作表单（Action Sheet），如下图，通常用于多个可选择操作。
 
 ![5](给设计师的iOS-UI介绍/5.png)
 
+UIProgressView是进度条，开发者可设置进度条的前景色，背景色，宽高等。
 
+UIToolBar为工具栏，位于页面的下方，可放置一些操作按钮。
+
+UIPickerView是选择器。通常用于时间，日期等数字的选择。开发者可以设置选择器的列数和行数，以及每个条目的文本信息，下图中是3列，255行。
 
 ![6](给设计师的iOS-UI介绍/6.png)
 
+以上就是一些常用的苹果官方控件。
 
-
-![]()
+苹果在设计这些控件和视图时，会遵循六个设计原则，这六个设计原则放在苹果iOS[人机界面指南](https://developer.apple.com/design/human-interface-guidelines/ios/overview/themes/)的首页。建议去官网观看。
 
 苹果六大设计原则
 
@@ -110,11 +118,7 @@ UISearchBar和列表视图放在一起时，再搭配UISearchController，可以
 
 - 用户控制(User Control)
 
-考虑时间的连续性，完整性
-
-- 例如：网络不同情况的处理、不同用户状态的处理
-
-人机界面指南（https://developer.apple.com/design/human-interface-guidelines/ios/overview/themes/ ）
+同样，如果你想了解更多，可以去苹果设计官网进行观看学习。
 
 苹果设计（https://developer.apple.com/design/resources/ ）
 
