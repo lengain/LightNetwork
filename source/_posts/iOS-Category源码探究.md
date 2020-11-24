@@ -250,7 +250,7 @@ attachCategories(Class cls, const locstamped_category_t *cats_list, uint32_t cat
         rwe->methods.attachLists(mlists + ATTACH_BUFSIZ - mcount, mcount);
         if (flags & ATTACH_EXISTING) flushCaches(cls);
     }
-    
+
     rwe->properties.attachLists(proplists + ATTACH_BUFSIZ - propcount, propcount);
 
     rwe->protocols.attachLists(protolists + ATTACH_BUFSIZ - protocount, protocount);
@@ -265,9 +265,20 @@ void attachLists(List* const * addedLists, uint32_t addedCount) {
             uint32_t oldCount = array()->count;
             uint32_t newCount = oldCount + addedCount;
             //realloc memmove memcpy三个是C语言方法。
-            //realloc 先判断当前的指针是否有足够的连续空间，如果有，扩大mem_address指向的地址，并且将mem_address返回，如果空间不够，先按照newsize指定的大小分配空间，将原有数据从头到尾拷贝到新分配的内存区域，而后释放原来mem_address所指内存区域（注意：原来指针是自动释放，不需要使用free），同时返回新分配的内存区域的首地址。即重新分配存储器块的地址。
-            //memmove 用于拷贝字节，如果目标区域和源区域有重叠的话，memmove能够保证源串在被覆盖之前将重叠区域的字节拷贝到目标区域中，但复制后源内容会被更改。但是当目标区域与源区域没有重叠则和memcpy函数功能相同。
-            //emcpy 指的是C和C++使用的内存拷贝函数，函数原型为void *memcpy(void *destin, void *source, unsigned n)；函数的功能是从源内存地址的起始位置开始拷贝若干个字节到目标内存地址中，即从源source中拷贝n个字节到目标destin中。
+            //realloc 先判断当前的指针是否有足够的连续空间，如果有，
+            //扩大mem_address指向的地址，并且将mem_address返回，
+            //如果空间不够，先按照newsize指定的大小分配空间，将原有
+            //数据从头到尾拷贝到新分配的内存区域，而后释放原来mem_address
+            //所指内存区域（注意：原来指针是自动释放，不需要使用free），
+            //同时返回新分配的内存区域的首地址。即重新分配存储器块的地址。
+            //memmove 用于拷贝字节，如果目标区域和源区域有重叠的话，
+            //memmove能够保证源串在被覆盖之前将重叠区域的字节拷贝到
+            //目标区域中，但复制后源内容会被更改。但是当目标区域与源区域
+            //没有重叠则和memcpy函数功能相同。
+            //memcpy 指的是C和C++使用的内存拷贝函数，函数原型为
+            //void *memcpy(void *destin, void *source, unsigned n)；
+            //函数的功能是从源内存地址的起始位置开始拷贝若干个字节到目标内存
+            //地址中，即从源source中拷贝n个字节到目标destin中。
             //增加数组的长度
             setArray((array_t *)realloc(array(), array_t::byteSize(newCount)));
             //重设新数组的长度
