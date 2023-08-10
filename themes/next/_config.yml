@@ -64,6 +64,7 @@ footer:
     color: "#ff0000"
 
   # If not defined, `author` from Hexo `_config.yml` will be used.
+  author: Lengain
   copyright: lengain.github.io
 
   # Powered by Hexo & NexT
