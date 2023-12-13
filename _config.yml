@@ -29,6 +29,8 @@ code_dir: downloads/code
 i18n_dir: :lang
 skip_render: [baidu_verify_SEJ6lsk01e.html,google3f06b54c01a92e3e.html]
 
+google_site_verification: 2tdYhTSWqbMRftkCFjZZlIbf2bVldwcsWH2HqpPSMRo
+
 # Writing
 new_post_name: :title.md # File name of new posts
 default_layout: post
@@ -156,6 +158,4 @@ deploy:
 - type: git
   repo: git@github.com:lengain/lengain.github.io.git
   branch: master
-- type: baidu_url_submitter
-
 
