@@ -82,8 +82,8 @@ If you prefer not to use any of the aforementioned dependency managers, you can 
 
 * iOS 13.0+ 
 * macOS 10.15+ 
-* tvOS 13.0+ 
-* watchOS 6.0+ 
+* tvOS 12.0+ 
+* watchOS 4.0+ 
 * Swift 5.7.1 
 * Xcode 14.1 
 

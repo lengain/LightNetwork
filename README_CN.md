@@ -25,7 +25,7 @@ LightNetwork是一个非常易于发起请求的swift网络库, 依赖于[Alamof
 
 - [x] [示例工程](https://github.com/lengain/ExampleForLightNetwork)
 
-## Introduction
+## 介绍
 
 在经过全局的一些配置后, 你可以使用`LightNetwork`轻松地发起请求.
 
@@ -47,14 +47,14 @@ LightNetwork是一个非常易于发起请求的swift网络库, 依赖于[Alamof
         print("Failure:\(error)")
     }
 ```
+更详细的配置可参考[示例工程](https://github.com/lengain/ExampleForLightNetwork).
 
 ## 安装
 
 ### Swift Package Manager
 
 [Swift Package Manager](https://swift.org/package-manager/) 是一个用于自动分发Swift代码的工具，并集成到Swift编译器中。
-
-                        一旦你的Swift包设置好了，添加' LightNetwork '作为依赖项就像把它添加到你的' package . Swift '或Xcode中的package列表的' dependencies '值一样简单。
+一旦你的Swift包设置好了，添加' LightNetwork '作为依赖项就像把它添加到你的' package . Swift '或Xcode中的package列表的' dependencies '值一样简单。
 
 ```swift
 dependencies: [
@@ -74,12 +74,12 @@ dependencies: [
 
 ## 环境
 
-* iOS 13.0+
-* macOS 10.15+
-* tvOS 13.0+
-* watchOS 6.0+
-* Swift 5.7.1
-* Xcode 14.1
+* iOS 13.0+ 
+* macOS 10.15+ 
+* tvOS 12.0+ 
+* watchOS 4.0+ 
+* Swift 5.7.1 
+* Xcode 14.1 
 
 ## 证书
 
