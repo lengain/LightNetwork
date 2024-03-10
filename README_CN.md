@@ -47,6 +47,7 @@ LightNetwork是一个非常易于发起请求的swift网络库, 依赖于[Alamof
         print("Failure:\(error)")
     }
 ```
+
 更详细的配置可参考[示例工程](https://github.com/lengain/ExampleForLightNetwork).
 
 ## 安装
@@ -66,6 +67,14 @@ dependencies: [
 
 ```swift
 .product(name: "LightNetwork", package: "LightNetwork")
+```
+
+### CocoaPods
+
+[CocoaPods](https://cocoapods.org)是Cocoa项目的依赖项管理器。有关使用和安装说明，请访问其网站。要使用CocoaPods将LightNetwork集成到Xcode项目中，请在`Podfile`中指定:
+
+```ruby
+pod 'LightNetwork'
 ```
 
 ### 手动集成

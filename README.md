@@ -74,6 +74,14 @@ Normally you'll want to depend on the `LightNetwork` target:
 .product(name: "LightNetwork", package: "LightNetwork")
 ```
 
+### CocoaPods
+
+[CocoaPods](https://cocoapods.org) is a dependency manager for Cocoa projects. For usage and installation instructions, visit their website. To integrate LightNetwork into your Xcode project using CocoaPods, specify it in your `Podfile`:
+
+```ruby
+pod 'LightNetwork'
+```
+
 ### Manually
 
 If you prefer not to use any of the aforementioned dependency managers, you can integrate LightNetwork into your project manually.
