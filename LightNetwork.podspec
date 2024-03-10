@@ -18,8 +18,7 @@ LightNetwork is a very easy-write HTTP networking library written in Swift, depe
   s.homepage         = 'https://github.com/lengain/LightNetwork'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { '童玉龙' => 'lengain@qq.com' }
-  s.source           = { :git => 'hhttps://github.com/lengain/LightNetwork.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.source           = { :git => 'https://github.com/lengain/LightNetwork.git', :tag => s.version.to_s }
   s.cocoapods_version = '>= 1.12.0'
 
   s.ios.deployment_target = '13.0'
