@@ -11,7 +11,7 @@ tags: 技术
 
 随着 HarmonyOS 生态的快速发展，移动应用对高质量音频处理的需求日益增长。无论是实时语音通话、音频录制还是流媒体传输，都需要一个高效、可靠的音频编解码解决方案。Opus 作为一种开放、免版税的音频编解码标准，以其卓越的音质和灵活性在业界广受认可。然而，HarmonyOS 平台缺乏成熟的 Opus 编解码库支持。本文将详细介绍 OpusOhos 库的设计与实现过程，探讨如何将 C/C++ 原生库高效集成到 HarmonyOS 应用开发生态中。
 
-目前该库已发布到OpenHarmony三方库中心仓，[点击前往]([OpenHarmony三方库中心仓](https://ohpm.openharmony.cn/#/cn/result?sortedType=relevancy&page=1&q=OpusOhos))
+目前该库已发布到OpenHarmony三方库中心仓，[点击前往](https://ohpm.openharmony.cn/#/cn/result?sortedType=relevancy&page=1&q=OpusOhos)
 
 <!--more-->
 
