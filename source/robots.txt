@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lengain.github.io/sitemap.xml
