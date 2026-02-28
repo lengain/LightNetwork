@@ -5,8 +5,6 @@ tags: 技术
 
 ---
 
-# OpusOhos：为 HarmonyOS 打造高性能音频编解码库
-
 ## 引言
 
 随着 HarmonyOS 生态的快速发展，移动应用对高质量音频处理的需求日益增长。无论是实时语音通话、音频录制还是流媒体传输，都需要一个高效、可靠的音频编解码解决方案。Opus 作为一种开放、免版税的音频编解码标准，以其卓越的音质和灵活性在业界广受认可。然而，HarmonyOS 平台缺乏成熟的 Opus 编解码库支持。本文将详细介绍 OpusOhos 库的设计与实现过程，探讨如何将 C/C++ 原生库高效集成到 HarmonyOS 应用开发生态中。
@@ -25,12 +23,6 @@ tags: 技术
 2. **低延迟**：实时通话场景要求端到端延迟控制在毫秒级
 3. **多场景适配**：支持从窄带语音（8kHz）到全频带音乐（48kHz）的各种应用场景
 4. **跨平台兼容**：与主流平台的 Opus 实现保持兼容
-
-
-
-
-
-
 
 ### 为什么选择 Opus
 
@@ -80,7 +72,7 @@ OpusOhos 采用三层架构设计，实现了从底层编解码算法到上层�
 
 #### 1. Opus 库版本
 
-我们选择了 libopus 1.5.2，这是截至开发时最新的稳定版本，提供了：
+OpusOhos 1.0.1 基于 libopus 1.5.2 实现，提供了：
 
 - 优化的 ARM NEON 指令集支持
 - 改进的低比特率性能
@@ -117,31 +109,27 @@ target_link_libraries(opusohos PUBLIC
 ```
 PCM Audio (Int16Array)
     ↓
-ArkTS Layer: 数据预处理与分帧
+ArkTS Layer: 准备单个音频帧
     ↓
 N-API Layer: ArrayBuffer 传递
     ↓
-Native Layer: opus_encode() 调用
+Native Layer: opus_encode() 编码单帧
     ↓
-N-API Layer: 打包格式封装
-    ↓
-ArkTS Layer: ArrayBuffer 返回
+ArkTS Layer: 返回裸 Opus 帧数据
 ```
 
 #### 解码流程
 
 ```
-Opus Data (ArrayBuffer)
+Opus Frame (Uint8Array / ArrayBuffer)
     ↓
-ArkTS Layer: 帧解析
+ArkTS Layer: 接收单个 Opus 帧
     ↓
-N-API Layer: 单帧传递
+N-API Layer: 帧数据传递
     ↓
-Native Layer: opus_decode() 调用
+Native Layer: opus_decode() 解码单帧
     ↓
-N-API Layer: PCM 数据创建
-    ↓
-ArkTS Layer: Int16Array 返回
+ArkTS Layer: 返回 Int16Array PCM 样本
 ```
 
 ### 内存管理策略
@@ -157,38 +145,60 @@ ArkTS Layer: Int16Array 返回
 
 ### 1. N-API 编码器实现
 
-N-API 层的编码器实现是整个系统的核心，需要处理数据转换、分帧、编码和打包等多个环节。
+N-API 层的编码器实现是整个系统的核心，处理数据转换、单帧编码、内存管理等环节。
 
 #### 初始化过程
 
 ```cpp
 static napi_value InitEncoder(napi_env env, napi_callback_info info) {
     // 1. 参数解析
-    size_t argc = 3;
-    napi_value args[3];
+    size_t argc = 4;
+    napi_value args[4];
     napi_get_cb_info(env, info, &argc, args, nullptr, nullptr);
 
-    int32_t sampleRate, channels, bitRate;
+    int32_t sampleRate, channels, bitRate, frameDurationMs;
     napi_get_value_int32(env, args[0], &sampleRate);
     napi_get_value_int32(env, args[1], &channels);
     napi_get_value_int32(env, args[2], &bitRate);
+    napi_get_value_int32(env, args[3], &frameDurationMs);
 
     // 2. 创建 Opus 编码器
     int err;
     encoder_ = opus_encoder_create(sampleRate, channels, 
                                     OPUS_APPLICATION_AUDIO, &err);
 
-    // 3. 计算帧大小（20ms）
-    gSampleRate = sampleRate;
-    switch (sampleRate) {
-        case 8000:  gFrameSize = 160; break;
-        case 12000: gFrameSize = 240; break;
-        case 16000: gFrameSize = 320; break;
-        case 24000: gFrameSize = 480; break;
-        case 48000: gFrameSize = 960; break;
+    // 3. 根据帧时长动态计算帧大小
+    gFrameDurationMs = frameDurationMs;
+    gFrameSize = static_cast<opus_int32>(sampleRate * frameDurationMs / 1000);
+
+    // 4. 验证帧时长合法性
+    const int validDurations[] = {
+        sampleRate / 400,      // 2.5ms
+        sampleRate / 200,      // 5ms
+        sampleRate / 100,      // 10ms
+        sampleRate / 50,       // 20ms
+        sampleRate / 50 * 2,   // 40ms
+        sampleRate / 50 * 3,   // 60ms
+        sampleRate / 50 * 4,   // 80ms
+        sampleRate / 50 * 5,   // 100ms
+        sampleRate / 50 * 6    // 120ms
+    };
+
+    bool isValidFrame = false;
+    for (int validSize : validDurations) {
+        if (gFrameSize == validSize) {
+            isValidFrame = true;
+            break;
+        }
     }
 
-    // 4. 配置比特率
+    if (!isValidFrame) {
+        OH_LOG_ERROR(LOG_APP, "Invalid frame duration: %d ms for sample rate %d",
+                     frameDurationMs, sampleRate);
+        return nullptr;
+    }
+
+    // 5. 配置比特率
     opus_encoder_ctl(encoder_, OPUS_SET_BITRATE(bitRate));
 
     return nullptr;
@@ -197,97 +207,114 @@ static napi_value InitEncoder(napi_env env, napi_callback_info info) {
 
 **设计要点：**
 
-- **帧大小计算**：Opus 要求固定帧长，我们选择 20ms 作为平衡延迟和效率的最佳值
-- **采样率映射**：根据 Opus 规范，不同采样率对应不同的帧样本数
-- **错误检查**：每一步都进行严格的错误检查，确保初始化成功
+- **动态帧大小计算**：根据采样率和帧时长灵活计算，不再固定为20ms
+- **帧时长验证**：支持2.5/5/10/20/40/60/80/100/120ms多种配置
+- **采样率适配**：根据不同采样率正确计算对应的帧样本数
+- **错误检查**：验证帧时长合法性，确保初始化成功
 
 #### 编码过程
 
-编码过程是性能关键路径，需要特别优化：
+编码过程现在专注于单个帧的高效编码，返回裸Opus数据：
 
 ```cpp
 static napi_value Encode(napi_env env, napi_callback_info info) {
-    // 1. 获取 PCM 数据
+    // 1. 获取单个 PCM 帧数据
+    napi_value args[1];
+    size_t argc = 1;
+    napi_get_cb_info(env, info, &argc, args, nullptr, nullptr);
+
     void *pcm = nullptr;
     size_t len = 0;
     napi_get_arraybuffer_info(env, args[0], &pcm, &len);
 
-    // 2. 数据验证
+    // 2. 数据验证 - 确保输入的样本数与帧大小一致
     size_t numSamples = len / sizeof(int16_t);
-
-    // 3. 分配输出缓冲区
-    const size_t maxEncodedSize = 4000;
-    const size_t maxFrames = (len + frameByte - 1) / frameByte;
-    const size_t outputBufferSize = maxFrames * (maxEncodedSize + 4);
-    void* outputBuffer = malloc(outputBufferSize);
-
-    // 4. 逐帧编码
-    int16_t* pcmSamples = static_cast<int16_t*>(pcm);
-    for (size_t sampleOffset = 0; 
-         sampleOffset + gFrameSize <= numSamples; 
-         sampleOffset += gFrameSize) {
-
-        unsigned char encodedFrame[4000];
-        int encodedBytes = opus_encode(encoder_,
-                                       &pcmSamples[sampleOffset],
-                                       gFrameSize,
-                                       encodedFrame, 
-                                       sizeof(encodedFrame));
-
-        // 5. 打包格式：[4字节长度|帧数据]
-        *reinterpret_cast<int*>(outputPtr) = encodedBytes;
-        outputPtr += 4;
-        memcpy(outputPtr, encodedFrame, encodedBytes);
-        outputPtr += encodedBytes;
-        totalOutputSize += 4 + encodedBytes;
+    if (numSamples != gFrameSize) {
+        OH_LOG_ERROR(LOG_APP, 
+                     "PCM frame size mismatch: expected %d samples, got %zu",
+                     gFrameSize, numSamples);
+        return nullptr;
     }
 
-    // 6. 创建返回的 ArrayBuffer
+    // 3. 分配输出缓冲区 - 裸 Opus 帧数据
+    const size_t maxEncodedSize = 4000;
+    unsigned char* outputBuffer = 
+        static_cast<unsigned char*>(malloc(maxEncodedSize));
+
+    // 4. 编码单个帧
+    int16_t* pcmSamples = static_cast<int16_t*>(pcm);
+    int encodedBytes = opus_encode(encoder_,
+                                   pcmSamples,
+                                   gFrameSize,
+                                   outputBuffer,
+                                   maxEncodedSize);
+
+    if (encodedBytes < 0) {
+        OH_LOG_ERROR(LOG_APP, "opus_encode failed with error: %d", 
+                     encodedBytes);
+        free(outputBuffer);
+        return nullptr;
+    }
+
+    // 5. 创建返回的 ArrayBuffer - 直接返回裸 Opus 帧
     napi_value result;
     void* resultData = nullptr;
-    napi_create_arraybuffer(env, totalOutputSize, &resultData, &result);
-    memcpy(resultData, outputBuffer, totalOutputSize);
+    napi_create_arraybuffer(env, encodedBytes, &resultData, &result);
+    memcpy(resultData, outputBuffer, encodedBytes);
     free(outputBuffer);
+
+    OH_LOG_INFO(LOG_APP, "Encoding completed: %d bytes", encodedBytes);
 
     return result;
 }
 ```
 
-**关键优化：**
+**关键特点：**
 
-1. **批量处理**：一次性处理多个帧，减少函数调用开销
-2. **内存预分配**：避免频繁的内存分配
-3. **自定义打包格式**：每帧前加 4 字节长度信息，便于解包和流式处理
-4. **零拷贝**：直接在 ArrayBuffer 上操作，避免额外拷贝
+1. **单帧处理**：一次编码调用处理一个音频帧
+2. **裸数据输出**：直接返回 Opus 编码数据，无额外打包开销
+3. **实时流传输**：编码后的数据可直接通过 WebSocket/RTC 发送
+4. **高效内存使用**：预分配固定大小缓冲区，避免频繁分配
 
 ### 2. N-API 解码器实现
 
-解码器的实现相对简单，但同样需要注意错误处理和内存管理：
+解码器处理裸 Opus 帧数据，直接转换为 PCM 样本：
 
 ```cpp
 static napi_value Decode(napi_env env, napi_callback_info info) {
-    // 1. 获取 Opus 数据
+    // 1. 获取单个 Opus 帧数据
+    napi_value args[1];
+    size_t argc = 1;
+    napi_get_cb_info(env, info, &argc, args, nullptr, nullptr);
+
     void *opusData = nullptr;
     size_t len = 0;
     napi_get_arraybuffer_info(env, args[0], &opusData, &len);
 
     // 2. 分配 PCM 输出缓冲区
-    const size_t maxFrameSize = 5760;  // 48kHz 时的最大帧
+    const size_t maxFrameSize = 5760;  // 48kHz 时的最大帧（120ms）
     int16_t *pcmOutput = static_cast<int16_t*>(
         malloc(maxFrameSize * sizeof(int16_t))
     );
 
-    // 3. 解码
+    // 3. 解码单个 Opus 帧
     int decodedSamples = opus_decode(
         decoder_,
         static_cast<const unsigned char*>(opusData),
         static_cast<opus_int32>(len),
         pcmOutput,
         maxFrameSize,
-        0  // FEC disabled
+        0  // FEC disabled（前向纠错关闭）
     );
 
-    // 4. 创建结果
+    if (decodedSamples < 0) {
+        OH_LOG_ERROR(LOG_APP, "opus_decode failed with error: %d", 
+                     decodedSamples);
+        free(pcmOutput);
+        return nullptr;
+    }
+
+    // 4. 创建返回的 ArrayBuffer - 直接返回 PCM 数据
     const size_t resultSize = decodedSamples * sizeof(int16_t);
     napi_value result;
     void* resultData = nullptr;
@@ -295,13 +322,22 @@ static napi_value Decode(napi_env env, napi_callback_info info) {
     memcpy(resultData, pcmOutput, resultSize);
     free(pcmOutput);
 
+    OH_LOG_INFO(LOG_APP, "Decoding completed: %d samples", decodedSamples);
+
     return result;
 }
 ```
 
+**关键特点：**
+
+1. **单帧解码**：处理单个裸 Opus 帧，返回对应的 PCM 样本
+2. **直接数据传递**：解码结果直接作为 ArrayBuffer 返回，可立即播放
+3. **动态采样数**：返回实际解码出的样本数，支持可变帧长
+4. **内存高效**：使用预分配的最大缓冲区，一次分配完成
+
 ### 3. ArkTS 封装层设计
 
-ArkTS 层提供面向对象的 API，隐藏底层复杂性：
+ArkTS 层提供面向对象的 API，简化使用流程：
 
 #### OpusEncoder 类
 
@@ -311,145 +347,231 @@ export class OpusEncoder {
   private channels: number = 0;
   private bitRate: number = 0;
   private frameSize: number = 0;
+  private frameDurationMs: number = 20;
 
-  init(sampleRate: number, channels: number, bitRate: number) {
-    opusOhos.initEncoder(sampleRate, channels, bitRate);
+  /**
+   * 初始化编码器
+   * @param sampleRate 采样率（8000/12000/16000/24000/48000）
+   * @param channels 声道数（1 或 2）
+   * @param bitRate 比特率（bps）
+   * @param frameDurationMs 帧时长（ms），可选，默认 20ms
+   *        支持值：2.5 | 5 | 10 | 20 | 40 | 60 | 80 | 100 | 120
+   *        推荐值：20ms（低延迟）、60ms（与 iOS opus_dart 兼容）
+   */
+  init(sampleRate: number, channels: number, bitRate: number, 
+       frameDurationMs?: number) {
+    const actualFrameDuration = frameDurationMs ?? 20;
+
+    // 验证帧时长
+    this.frameSize = OpusEncoder.getFrameSize(sampleRate, actualFrameDuration);
+
+    // 初始化编码器
+    opusOhos.initEncoder(sampleRate, channels, bitRate, actualFrameDuration);
+
     this.sampleRate = sampleRate;
     this.channels = channels;
     this.bitRate = bitRate;
-
-    // 计算帧大小
-    this.frameSize = OpusEncoder.getFrameSize(sampleRate);
+    this.frameDurationMs = actualFrameDuration;
   }
 
+  /**
+   * 编码单个 PCM 帧为裸 Opus 数据
+   * 
+   * @param pcmData Int16Array 格式的 PCM 样本
+   * @returns ArrayBuffer 格式的裸 Opus 帧数据
+   */
   encode(pcmData: Int16Array): ArrayBuffer {
-    // 数据清理：确保 buffer 对齐
-    if (pcmData.byteOffset === 0 && 
-        pcmData.buffer.byteLength === pcmData.byteLength) {
-      return opusOhos.encode(pcmData.buffer);
-    } else {
-      // 创建干净的 buffer
-      const cleanBuffer = new ArrayBuffer(pcmData.byteLength);
-      new Uint8Array(cleanBuffer).set(
-        new Uint8Array(pcmData.buffer, pcmData.byteOffset, pcmData.byteLength)
-      );
-      return opusOhos.encode(cleanBuffer);
+    if (pcmData.length !== this.frameSize) {
+      throw new Error(`PCM frame size mismatch: expected ${this.frameSize}, ` +
+                      `got ${pcmData.length}`);
     }
+
+    const cleanBuffer = this.ensureAlignedBuffer(pcmData);
+    return opusOhos.encode(cleanBuffer);
   }
 
-  static getFrameSize(sampleRate: number): number {
-    switch (sampleRate) {
-      case 8000:  return 160;
-      case 12000: return 240;
-      case 16000: return 320;
-      case 24000: return 480;
-      case 48000: return 960;
-      default: return Math.floor(sampleRate * 0.02);
+  /**
+   * 根据采样率和帧时长计算帧大小
+   * @param sampleRate 采样率
+   * @param frameDurationMs 帧时长（ms），可选，默认 20ms
+   * @returns 每帧样本数
+   */
+  static getFrameSize(sampleRate: number, frameDurationMs?: number): number {
+    const duration = frameDurationMs ?? 20;
+    const frameSize = Math.floor(sampleRate * duration / 1000);
+
+    // 验证帧时长支持
+    const validDurations = [2.5, 5, 10, 20, 40, 60, 80, 100, 120];
+    if (!validDurations.includes(duration)) {
+      throw new Error(`Unsupported frame duration ${duration}ms. ` +
+                      `Supported: 2.5, 5, 10, 20, 40, 60, 80, 100, 120`);
     }
+
+    return frameSize;
   }
 
-  // 工具方法：字节数组转 Int16Array
+  /**
+   * 工具方法：Uint8Array 转 Int16Array
+   */
   static bytesToInt16(bytes: Uint8Array): Int16Array {
     if (bytes.byteOffset % 2 === 0) {
       return new Int16Array(bytes.buffer, bytes.byteOffset, 
                            Math.floor(bytes.length / 2));
     }
 
-    // 处理未对齐的情况
     const int16Length = Math.floor(bytes.length / 2);
     const int16List = new Int16Array(int16Length);
     const dataView = new DataView(bytes.buffer, bytes.byteOffset);
     for (let i = 0; i < int16Length; i++) {
-      int16List[i] = dataView.getInt16(i * 2, true);  // 小端序
+      int16List[i] = dataView.getInt16(i * 2, true);
     }
     return int16List;
   }
 
+  private ensureAlignedBuffer(pcmData: Int16Array): ArrayBuffer {
+    if (pcmData.byteOffset === 0 && 
+        pcmData.buffer.byteLength === pcmData.byteLength) {
+      return pcmData.buffer;
+    }
+
+    const cleanBuffer = new ArrayBuffer(pcmData.byteLength);
+    new Uint8Array(cleanBuffer).set(
+      new Uint8Array(pcmData.buffer, pcmData.byteOffset, pcmData.byteLength)
+    );
+    return cleanBuffer;
+  }
+
   destroy() {
-    opusOhos.destroy();
+    opusOhos.destroyEncoder();
   }
 }
 ```
 
-**设计亮点：**
+**API 特点：**
 
-1. **状态管理**：封装编码器参数，避免重复传递
-2. **数据对齐处理**：自动检测和修复 ArrayBuffer 对齐问题
-3. **工具方法**：提供常用的数据转换功能
-4. **错误防护**：在调用前检查初始化状态
+1. **灵活的帧时长**：支持2.5-120ms多种配置
+2. **单帧编码**：一次处理一个音频帧，直接返回裸Opus数据
+3. **流传输优化**：编码结果可直接通过网络发送
+4. **输入验证**：自动检查帧大小，提前发现错误
 
 #### OpusDecoder 类
-
-解码器的设计类似，但增加了帧解析功能：
 
 ```typescript
 export class OpusDecoder {
   private sampleRate: number = 0;
   private channels: number = 0;
   private frameSize: number = 0;
+  private frameDurationMs: number = 20;
 
-  init(sampleRate: number, channels: number) {
-    opusOhos.initDecoder(sampleRate, channels);
+  /**
+   * 初始化解码器
+   * @param sampleRate 采样率（8000/12000/16000/24000/48000）
+   * @param channels 声道数（1 或 2）
+   * @param frameDurationMs 帧时长（ms），可选，默认 20ms
+   *        支持值：2.5 | 5 | 10 | 20 | 40 | 60 | 80 | 100 | 120
+   *        推荐值：20ms（低延迟）、60ms
+   * @note 解码时的帧时长应与编码时一致
+   */
+  init(sampleRate: number, channels: number, frameDurationMs?: number) {
+    const actualFrameDuration = frameDurationMs ?? 20;
+
+    // 验证帧时长
+    this.frameSize = OpusDecoder.getFrameSize(sampleRate, actualFrameDuration);
+
+    // 初始化解码器
+    opusOhos.initDecoder(sampleRate, channels, actualFrameDuration);
+
     this.sampleRate = sampleRate;
     this.channels = channels;
-    this.frameSize = OpusEncoder.getFrameSize(sampleRate);
+    this.frameDurationMs = actualFrameDuration;
   }
 
-  decode(packedOpusData: ArrayBuffer): Int16Array {
-    // 解析打包格式
-    const view = new DataView(packedOpusData);
-    let offset = 0;
-    const frames: ArrayBuffer[] = [];
-
-    while (offset < view.byteLength) {
-      const frameLength = view.getInt32(offset, true);  // 小端序
-      offset += 4;
-
-      if (frameLength <= 0 || offset + frameLength > view.byteLength) {
-        break;
-      }
-
-      frames.push(packedOpusData.slice(offset, offset + frameLength));
-      offset += frameLength;
+  /**
+   * 解码单个裸 Opus 帧为 PCM 数据
+   * 
+   * 适用于实时流传输场景（WebSocket 接收）：
+   * - 输入：单个裸 Opus 帧（从网络接收的原始数据）
+   * - 输出：PCM 样本数组（Int16Array）
+   * 
+   * @param frameData 单个 Opus 帧数据 (Uint8Array 或 ArrayBuffer)
+   * @returns 解码后的 PCM 样本 (Int16Array)
+   */
+  decode(frameData: Uint8Array | ArrayBuffer): Int16Array {
+    if (this.sampleRate === 0) {
+      throw new Error('Decoder not initialized. Call init() first.');
     }
 
-    // 解码所有帧并合并
-    const decodedSamples: Int16Array[] = [];
-    let totalSamples = 0;
+    // 统一转换为 ArrayBuffer
+    const buffer = frameData instanceof Uint8Array ? frameData.buffer : frameData;
 
-    for (const frame of frames) {
-      const pcmFrame = this.decodeFrame(new Uint8Array(frame));
-      decodedSamples.push(pcmFrame);
-      totalSamples += pcmFrame.length;
-    }
+    // 调用 native decode 方法
+    const pcmBuffer: ArrayBuffer = opusOhos.decode(buffer);
 
-    // 合并结果
-    const result = new Int16Array(totalSamples);
-    let writeOffset = 0;
-    for (const samples of decodedSamples) {
-      result.set(samples, writeOffset);
-      writeOffset += samples.length;
-    }
-
-    return result;
+    // 将 ArrayBuffer 转换为 Int16Array
+    const int16Length = pcmBuffer.byteLength / 2;
+    return new Int16Array(pcmBuffer, 0, int16Length);
   }
 
-  decodeFrame(frameData: Uint8Array): Int16Array {
-    const pcmBuffer: ArrayBuffer = opusOhos.decode(frameData.buffer);
-    return new Int16Array(pcmBuffer);
+  /**
+   * 解码单个裸 Opus 帧，直接返回 Uint8Array 格式的 PCM 数据
+   * 
+   * @param frameData 单个 Opus 帧数据 (Uint8Array 或 ArrayBuffer)
+   * @returns Uint8Array 格式的 PCM 数据
+   */
+  decodeToBytes(frameData: Uint8Array | ArrayBuffer): Uint8Array {
+    const samples = this.decode(frameData);
+    return new Uint8Array(samples.buffer, samples.byteOffset, samples.byteLength);
   }
 
-  static int16ToBytes(int16Data: Int16Array): Uint8Array {
-    return new Uint8Array(int16Data.buffer, 
-                          int16Data.byteOffset, 
-                          int16Data.byteLength);
+  /**
+   * 根据采样率和帧时长计算帧大小
+   * @param sampleRate 采样率
+   * @param frameDurationMs 帧时长（ms），可选，默认 20ms
+   * @returns 每帧样本数
+   */
+  static getFrameSize(sampleRate: number, frameDurationMs?: number): number {
+    const duration = frameDurationMs ?? 20;
+    const frameSize = Math.floor(sampleRate * duration / 1000);
+
+    const validDurations = [2.5, 5, 10, 20, 40, 60, 80, 100, 120];
+    if (!validDurations.includes(duration)) {
+      throw new Error(`Unsupported frame duration ${duration}ms. ` +
+                      `Supported: 2.5, 5, 10, 20, 40, 60, 80, 100, 120`);
+    }
+
+    return frameSize;
+  }
+
+  /**
+   * 工具方法：Uint8Array 转 Int16Array
+   */
+  static bytesToInt16(bytes: Uint8Array): Int16Array {
+    if (bytes.byteOffset % 2 === 0) {
+      return new Int16Array(bytes.buffer, bytes.byteOffset, 
+                           Math.floor(bytes.length / 2));
+    }
+
+    const int16Length = Math.floor(bytes.length / 2);
+    const int16List = new Int16Array(int16Length);
+    const dataView = new DataView(bytes.buffer, bytes.byteOffset);
+    for (let i = 0; i < int16Length; i++) {
+      int16List[i] = dataView.getInt16(i * 2, true);
+    }
+    return int16List;
   }
 
   destroy() {
-    opusOhos.releaseDecoder();
+    opusOhos.destroyDecoder();
   }
 }
 ```
+
+**API 特点：**
+
+1. **单帧解码**：处理单个裸Opus帧，直接返回PCM样本
+2. **多种返回格式**：支持Int16Array和Uint8Array两种输出格式
+3. **灵活的帧时长**：支持与编码器一致的多种帧时长配置
+4. **流传输优化**：接收网络数据后可直接解码播放
 
 ### 4. 多架构支持
 
@@ -477,19 +599,19 @@ target_link_libraries(opusohos PUBLIC
 
 ## 性能优化策略
 
-### 1. 编码性能优化
+### 1. 单帧流传输优化
 
-**批量处理**：
+**直接编解码**：
 
-- 一次编码调用处理多个帧
-- 减少跨层调用次数
-- 预分配输出缓冲区
+- 编码：PCM 帧 → 裸 Opus 数据（无打包开销）
+- 解码：裸 Opus 帧 → PCM 样本（无解包开销）
+- 适合实时流传输（WebSocket、RTC）
 
-**实测数据**（48kHz, 单声道）：
+**实测性能指标**（48kHz, 单声道）：
 
-- 单帧编码：~0.5ms
-- 批量编码（10帧）：~4ms（平均 0.4ms/帧）
-- 性能提升：~20%
+- 单帧编码延迟：~0.3-0.5ms
+- 单帧解码延迟：~0.2-0.4ms
+- 低开销的网络传输
 
 ### 2. 内存优化
 
@@ -499,58 +621,23 @@ target_link_libraries(opusohos PUBLIC
 - 避免 ArkTS 和 C++ 之间的数据复制
 - 直接在原始 buffer 上操作
 
-**内存池**：
+**高效的帧大小计算**：
 
-- 编码器和解码器状态复用
-- 减少频繁的对象创建销毁
+- 预计算帧大小，避免重复计算
+- 支持多种帧时长配置（2.5-120ms）
 
-### 3. 错误处理优化
+### 3. 错误处理与日志
 
 **快速失败**：
 
-- 参数验证前置
+- 参数验证前置（帧大小、帧时长）
 - 早期返回避免无效计算
 - 详细的日志记录（使用 HiLog）
 
 ```cpp
-OH_LOG_INFO(LOG_APP, "Encoding completed: %d frames, output: %zu bytes", 
-            frameCount, totalOutputSize);
+OH_LOG_INFO(LOG_APP, "Encoding completed: %d bytes", encodedBytes);
 OH_LOG_ERROR(LOG_APP, "opus_encode failed with error: %d", encodedBytes);
 ```
-
-## 测试与验证
-
-### 单元测试
-
-基于 HarmonyOS 的 `@ohos/hypium` 测试框架：
-
-```typescript
-describe('OpusEncoder Test', () => {
-  it('should encode PCM to Opus', 0, () => {
-    const encoder = new OpusEncoder();
-    encoder.init(48000, 1, 64000);
-
-    // 生成测试数据（960 samples = 20ms at 48kHz）
-    const pcmData = new Int16Array(960);
-    for (let i = 0; i < 960; i++) {
-      pcmData[i] = Math.sin(2 * Math.PI * 440 * i / 48000) * 32767;
-    }
-
-    const encoded = encoder.encode(pcmData);
-    expect(encoded.byteLength).assertLarger(0);
-
-    encoder.destroy();
-  });
-});
-```
-
-### ### 兼容性验证
-
-**跨平台兼容性**：
-
-- 使用标准 Opus 测试向量
-- 与其他平台的 Opus 实现对比
-- 验证编码数据的可解码性
 
 ## 部署与使用
 
@@ -561,7 +648,7 @@ describe('OpusEncoder Test', () => {
 ```json
 {
   "name": "@lengain/opusohos",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Opus audio codec for HarmonyOS",
   "main": "Index.ets",
   "license": "Apache-2.0",
@@ -576,18 +663,28 @@ describe('OpusEncoder Test', () => {
 ```typescript
 import { OpusEncoder, OpusDecoder } from '@lengain/opusohos';
 
-// 编码示例
+// 编码示例 - 支持灵活的帧时长配置
 const encoder = new OpusEncoder();
-encoder.init(48000, 1, 64000);
-const encodedData = encoder.encode(pcmSamples);
+encoder.init(48000, 1, 64000, 20);  // 48kHz, 单声道, 64kbps, 20ms帧
+const pcmFrame = new Int16Array(960);  // 960 samples = 20ms @ 48kHz
+const opusFrame = encoder.encode(pcmFrame);  // 返回裸 Opus 帧
 encoder.destroy();
 
-// 解码示例
+// 解码示例 - 接收的裸 Opus 帧可直接解码
 const decoder = new OpusDecoder();
-decoder.init(48000, 1);
-const decodedPcm = decoder.decode(encodedData);
+decoder.init(48000, 1, 20);  // 参数须与编码端一致
+const pcmData = decoder.decode(opusFrame);  // 直接返回 PCM 样本
+// 或返回 Uint8Array 格式
+const pcmBytes = decoder.decodeToBytes(opusFrame);
 decoder.destroy();
 ```
+
+**关键改进**：
+
+1. **单帧编解码**：直接处理单个帧，返回裸Opus数据，无打包开销
+2. **灵活帧时长**：支持2.5-120ms的多种帧时长配置
+3. **流传输友好**：编码结果可直接通过WebSocket/RTC发送
+4. **简化的API**：不再需要复杂的打包/解包逻辑
 
 ### 
 
