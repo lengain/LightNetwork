@@ -5,6 +5,13 @@
   "hexo": {
     "version": "5.2.0"
   },
+  "scripts": {
+    "build": "hexo generate",
+    "deploy": "hexo deploy",
+    "server": "hexo server",
+    "export:busuanzi": "node scripts/export_busuanzi.js",
+    "backup:busuanzi": "node scripts/backup_busuanzi.js"
+  },
   "dependencies": {
     "eslint": "^5.16.0",
     "gitment": "0.0.3",

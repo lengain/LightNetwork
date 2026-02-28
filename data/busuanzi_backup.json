@@ -1,0 +1,21 @@
+{
+  "last_backup": "2026-02-28T06:06:12.621Z",
+  "total_records": 2,
+  "site_url": "https://lengain.github.io",
+  "history": [
+    {
+      "timestamp": "2026-02-28T06:06:10.734Z",
+      "type": "hexo-content-based",
+      "posts": 0,
+      "site_url": "https://lengain.github.io",
+      "pages": []
+    },
+    {
+      "timestamp": "2026-02-28T06:06:12.621Z",
+      "type": "hexo-content-based",
+      "posts": 0,
+      "site_url": "https://lengain.github.io",
+      "pages": []
+    }
+  ]
+}

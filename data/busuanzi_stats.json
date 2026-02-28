@@ -1,0 +1,13 @@
+{
+  "last_export": "2026-02-28T06:00:42.930Z",
+  "total_exports": 1,
+  "note": "此文件包含不蒜子统计数据的备份。当不蒜子服务不可用时可作为fallback使用。",
+  "exports": [
+    {
+      "timestamp": "2026-02-28T06:00:42.928Z",
+      "site_url": "https://lengain.github.io",
+      "total_posts": 0,
+      "posts": []
+    }
+  ]
+}
