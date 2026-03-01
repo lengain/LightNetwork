@@ -2,6 +2,7 @@
 title: Ruby方法中的!和?
 date: 2023-12-11 20:26:24
 tags: Ruby
+permalink: /2023/12/11/ruby-methods-with-bangs-and-questions/
 ---
 
 ##### 方法名后缀为"!"的方法

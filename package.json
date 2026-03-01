@@ -10,7 +10,8 @@
     "deploy": "hexo deploy",
     "server": "hexo server",
     "export:busuanzi": "node scripts/export_busuanzi.js",
-    "backup:busuanzi": "node scripts/backup_busuanzi.js"
+    "backup:busuanzi": "node scripts/backup_busuanzi.js",
+    "simulate:visits": "node tools/simulate_visits.js"
   },
   "dependencies": {
     "eslint": "^5.16.0",
