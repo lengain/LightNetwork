@@ -119,7 +119,7 @@ darkmode: true
 menu:
   home: / || fa fa-home
   tags: /tags/ || fa fa-tags
-  #categories: /categories/ || fa fa-th
+  categories: /categories/ || fa fa-th
   archives: /archives/ || fa fa-archive
   about: /about/ || fa fa-user
   #schedule: /schedule/ || fa fa-calendar
