@@ -2,7 +2,10 @@
 title: 项目管理平台搭建：以iOS开发为例
 date: 2025-10-09 22:57:58
 tags:
-categories:
+  - iOS
+  - 项目管理
+  - 工程化
+categories: 技术
 ---
 
 # 项目管理平台搭建：以iOS开发为例

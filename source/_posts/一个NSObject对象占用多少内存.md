@@ -1,8 +1,11 @@
 ---
 title: 一个NSObject对象占用多少内存
 date: 2023-12-13 23:45:27
-tags: iOS
-categories:
+tags:
+  - iOS
+  - NSObject
+  - 内存
+categories: 技术
 ---
 
 OC类型的代码，底层实现都是C/C++语言，可以说，OC语言就是对C/C++语言的封装，比如，任何OC对象，添加`__bridge const void *`修饰，都可以转变为void指针类型。

@@ -1,8 +1,11 @@
 ---
 title: Dart ...展开操作符
 date: 2023-08-08 16:30:18
-tags: Dart
-categories: 
+tags:
+  - Dart
+  - Flutter
+  - 跨平台
+categories: 技术
 ---
 
 Dart支持展开操作符(**spread operator**)`...`和空感展开操作符(**null-aware spread operator**)`...?`。

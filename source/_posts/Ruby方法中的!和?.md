@@ -1,7 +1,10 @@
 ---
 title: Ruby方法中的!和?
 date: 2023-12-11 20:26:24
-tags: Ruby
+tags:
+  - Ruby
+  - 语法
+categories: 技术
 permalink: /2023/12/11/ruby-methods-with-bangs-and-questions/
 ---
 

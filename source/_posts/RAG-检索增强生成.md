@@ -1,7 +1,10 @@
 ---
 title: 'RAG:检索增强生成'
 date: 2025-11-27 22:24:07
-tags: AI大模型
+tags:
+  - AI大模型
+  - RAG
+  - LLM
 categories: AI大模型
 ---
 

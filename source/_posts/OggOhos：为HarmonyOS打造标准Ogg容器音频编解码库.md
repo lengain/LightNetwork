@@ -1,7 +1,11 @@
 ---
 title: OggOhos：为HarmonyOS打造标准Ogg容器音频编解码库
 date: 2026-02-28 10:00:00
-tags: 技术
+tags:
+  - 鸿蒙
+  - 音频
+  - 编解码
+categories: 技术
 ---
 
 ## 引言

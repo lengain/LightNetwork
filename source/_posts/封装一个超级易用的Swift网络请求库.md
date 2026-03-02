@@ -1,8 +1,11 @@
 ---
 title: 封装一个超级易用的Swift网络请求库
 date: 2024-03-11 11:38:55
-tags: iOS
-categories:
+tags:
+  - iOS
+  - Swift
+  - 网络
+categories: 技术
 ---
 
 Swift网络库最著名的就是`Alamofire`,但是在实际项目中，想要尽可能简单的发起网络请求，必须对`Alamofire`进行一层封装。依赖`Alamofire`的封装库也有很多优秀的，比如`Moya`。但是经过项目的使用，我发现`Moya`用起来并不简单。

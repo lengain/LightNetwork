@@ -1,7 +1,11 @@
 ---
 title: 如何做一个CALayer 自定义属性CAAnimation动画
 date: 2018-12-27 17:38:37
-tags: 技术
+tags:
+  - iOS
+  - CALayer
+  - CAAnimation
+categories: 技术
 ---
 
 最近在做CALayer自定义属性(`@property`修饰)动画。之前没有深究过，现在有很多有意思的发现，写出来分享给大家。

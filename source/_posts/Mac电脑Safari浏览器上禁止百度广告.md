@@ -1,7 +1,11 @@
 ---
 title: Mac电脑Safari浏览器上禁止百度广告
 date: 2020-05-29 20:26:24
-tags: 软件
+tags:
+  - Safari
+  - Mac
+  - 工具
+categories: 技术
 ---
 
 #### 起因

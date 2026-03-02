@@ -1,7 +1,11 @@
 ---
 title: iOS Category源码探究
 date: 2020-11-19 10:08:21
-tags: 技术
+tags:
+  - iOS
+  - Objective-C
+  - Category
+categories: 技术
 ---
 
 Objective-C的Category特性，使的开发者在处理某些问题时，简单而又方便。理解Category的源码，对OC编程的理解会有很大的帮助。

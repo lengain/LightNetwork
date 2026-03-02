@@ -1,8 +1,11 @@
 ---
 title: OpusOhos：为 HarmonyOS 打造高性能音频编解码库
 date: 2026-02-19 11:00:49
-tags: 技术
-
+tags:
+  - 鸿蒙
+  - 音频
+  - 编解码
+categories: 技术
 ---
 
 ## 引言

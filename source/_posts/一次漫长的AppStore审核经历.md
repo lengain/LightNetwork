@@ -1,7 +1,11 @@
 ---
 title: 一次漫长的AppStore审核经历
 date: 2020-05-06 12:50:38
-tags: 其他
+tags:
+  - iOS
+  - AppStore
+  - 审核
+categories: 技术
 ---
 
 最近发布了一款Mac系统环境下的App，名字叫做“[二维码扩展](https://apps.apple.com/us/app/%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%89%A9%E5%B1%95/id1491889350?l=zh&ls=1)”，发布过程比正常的发布过程多花了不少时间，历时一个多月。在此记录一下。
