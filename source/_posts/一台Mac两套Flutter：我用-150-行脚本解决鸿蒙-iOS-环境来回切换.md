@@ -8,17 +8,15 @@ tags:
 categories: 技术
 ---
 
-
-
-
-
-> 每次切环境都像拆盲盒：`flutter` 到底指向哪个 SDK？`pub get` 为什么又超时了？
-
-> 这篇文章分享一个可落地的工程化解法：用一个 Shell 脚本，把鸿蒙与 iOS 的 Flutter 环境切换做成“可重复、可追溯、可持久化、可自愈”的标准流程。
+> 每次切环境都像拆盲盒：`flutter` 到底指向哪个 SDK？
+> 
+> `pub get` 为什么又超时了？
 
 ---
 
-## 先说痛点：为什么“手动 export”迟早出事
+这篇文章分享一个可落地的工程化解法：用一个 [Shell 脚本](https://github.com/lengain/flutter_env_switch)，把鸿蒙与 iOS 的 Flutter 环境切换做成“可重复、可追溯、可持久化、可自愈”的标准流程。
+
+## 先说痛点
 
 如果你和我一样，一台 Mac 同时做两类 Flutter 开发：
 
@@ -208,7 +206,9 @@ source ~/.flutter_env
 ### 5) 自动写入 shell 配置 + 可观测自检
 
 - 脚本会自动识别并写入 `~/.zshrc` 或 `~/.bash_profile`；
+
 - 写入使用“块级去重”，不会重复追加；
+
 - `show`：查看当前关键变量与 Flutter 版本；
 
 - `check`：执行自动检查与修复（目录、下载、shell 加载配置）。
@@ -264,6 +264,8 @@ bash ./flutter_env_switch.sh check
 - 首次切到某个环境时，`flutter --version` 可能先触发工具链初始化下载，这是正常行为；
 - 日志里出现 `Downloading...` 不一定是错误，脚本会自动重试并提取最终版本行；
 - 若网络不稳定，脚本会给出重试与后续操作指引（例如执行 `check`、清理缓存后重试）。
+- 脚本会自动下载鸿蒙/iOS flutter，下载好后，需要手动去切换各个平台的flutter版本。
+- 在自动化打包时，可以调用本脚本，保证flutter环境正确。
 
 ---
 
