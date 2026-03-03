@@ -8,10 +8,6 @@ tags:
 categories: 技术
 ---
 
-
-
-# iOS 26.3 CocoaPods 动态框架链接导致网络栈失效问题分析
-
 ## 摘要
 
 在 iOS 26.3（Xcode 相应版本）上，使用 CocoaPods 的 `use_frameworks!` 动态链接方式部署 Flutter 应用时，会导致整个网络栈（包括 DNS 解析和 TCP 连接）完全失效。本文通过系统的诊断实验，揭示了这一问题的根本原因，并提供了可靠的修复方案。
@@ -93,8 +89,6 @@ Error: Connection failed (OS Error: No route to host)
 | 3   | 同一插件 + 改为静态链接                    | `use_frameworks! :linkage => :static` | ✅ 网络正常   | 静态链接可解决网络问题       |
 | 4   | 全量原生插件集合                         | `:linkage => :static`                 | ✅ 网络正常   | 静态链接对多数插件有效       |
 | 5   | 全量插件 + 预编译动态库（Opus）              | `:linkage => :static`                 | ❌ DNS 失败 | 预编译动态库不受静态链接影数    |
-
-
 
 **关键发现：**
 
@@ -493,8 +487,6 @@ Xcode 编译链接阶段
 ## 四、深度讨论
 
 ### 4.1 为什么这个 Bug 只在 iOS 26.3 出现？
-
-
 
 | iOS 版本        | dyld 符号解析策略          | 动态框架兼容性  | 网络栈状态  |
 | ------------- | -------------------- | -------- | ------ |
