@@ -1,0 +1,19 @@
+// Keep sidebar on the left, but pin back-to-top to bottom-right.
+.back-to-top
+  right: 30px !important
+  left: auto !important
+
+  +tablet-mobile()
+    right: 20px !important
+    left: auto !important
+
+    // On mobile, keep the same bottom baseline as sidebar toggle.
+    &.back-to-top-on
+      bottom: calc(20px + env(safe-area-inset-bottom)) !important
+
+// On mobile, pin menu button to bottom-left with same bottom spacing.
++tablet-mobile()
+  .sidebar-toggle
+    left: 20px !important
+    right: auto !important
+    bottom: calc(20px + env(safe-area-inset-bottom)) !important
