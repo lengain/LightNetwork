@@ -38,7 +38,7 @@ titlecase: false # Transform title into titlecase
 filename_case: 0
 render_drafts: false
 post_asset_folder: true
-relative_link: true
+relative_link: false
 highlight:
   enable: true
   line_number: true
