@@ -4,6 +4,7 @@ date: 2026-03-03 11:40:18
 tags:
   - 鸿蒙
   - so
+  - AI辅助创作
 categories: 技术
 ---
 

@@ -1,20 +1,22 @@
 ---
 title: Flutter Flavorizr 鸿蒙平台适配多目标产物
 date: 2026-03-04 23:42:14
-tags: 鸿蒙 AI辅助创作
+tags: 
+  - 鸿蒙
+  - AI辅助创作
 categories: 技术
 ai_assisted: true
 ---
 
-## 一、项目背景
+## 项目背景
 
-### 1.1 Flutter Flavorizr 是什么
+### Flutter Flavorizr 是什么
 
 [Flutter Flavorizr](https://github.com/AngeloAvv/flutter_flavorizr) 是 Flutter 生态中广泛使用的多环境构建工具，通过一份 YAML 配置自动生成 Android、iOS、macOS 三端的 flavor 工程结构。开发者只需声明各 flavor 的包名、图标、签名等差异化配置，工具即可自动完成 Gradle productFlavors 注入、Xcode scheme/build configuration 创建、资源文件分发等繁琐工作。
 
 该项目在 pub.dev 上拥有较高使用量，是 Flutter 多环境管理的事实标准方案之一。
 
-### 1.2 为什么要做鸿蒙适配
+### 为什么要做鸿蒙适配
 
 随着 HarmonyOS 生态的持续推进，越来越多的 Flutter 应用需要同时支持 Android、iOS 和鸿蒙三端。Flutter 社区已提供鸿蒙版 SDK（如 `Flutter 3.35.8-ohos`），但在构建工具层面，flavorizr 尚未支持鸿蒙平台的多产品（multi-product）构建。
 
@@ -29,11 +31,13 @@ ai_assisted: true
 
 这意味着不能简单复用已有的 Android 或 iOS 处理器逻辑，需要为鸿蒙平台设计全新的配置模型和处理器链路。
 
-## 二、核心问题分析
+<!--more-->
+
+## 核心问题分析
 
 适配过程中需要解决以下几个核心问题：
 
-### 2.1 鸿蒙构建配置的双层结构
+### 鸿蒙构建配置的双层结构
 
 鸿蒙工程的多产品配置分布在两个层级：
 
@@ -42,7 +46,7 @@ ai_assisted: true
 
 这两个文件必须保持一致——每个 product 需要对应一个 target，target 的 `applyToProducts` 需要引用正确的 product name。
 
-### 2.2 product name 与 `flutter run --flavor` 的对齐
+### product name 与 `flutter run --flavor` 的对齐
 
 Flutter 鸿蒙版执行 `flutter run --flavor apple` 时，内部调用链如下：
 
@@ -56,17 +60,17 @@ flutter run --flavor apple
 
 这意味着 `build-profile.json5` 中的 `product.name` 必须与 `flutter run --flavor` 传入的 flavor 名**完全一致**。如果不一致，会静默回退到 default product，使用错误的签名和配置构建。
 
-### 2.3 已有配置的非破坏性合并
+### 已有配置的非破坏性合并
 
 用户的 `build-profile.json5` 中可能已存在手动配置的 products、signingConfigs、buildModeSet 等内容。处理器不能简单覆盖整个文件，必须实现**增量合并**——仅更新 flavorizr 管理的条目，保留其他内容不变。
 
-### 2.4 跨平台工程目录的容错
+### 跨平台工程目录的容错
 
 实际项目中，并非所有平台目录都存在。例如一个主要面向鸿蒙和 Android 的项目可能没有 `macos/` 目录。原有代码只检查 flavorizr.yaml 中是否配置了对应平台的 flavor，不检查目录是否存在，导致 Xcode 相关处理器在缺少 `.xcodeproj` 时崩溃。
 
-## 三、技术方案设计
+## 技术方案设计
 
-### 3.1 整体架构
+### 整体架构
 
 适配方案遵循 flavorizr 的处理器（Processor）架构，新增三个鸿蒙处理器：
 
@@ -81,7 +85,7 @@ ohos:targets   →  OhosTargetsTargetFileProcessor
 ohos:icons     →  OhosIconsProcessor (分发图标)
 ```
 
-### 3.2 配置模型：Ohos 数据类
+### 配置模型：Ohos 数据类
 
 新增 `Ohos` 模型类继承 `OS`，使用 `json_serializable` 自动生成反序列化代码：
 
@@ -107,7 +111,7 @@ class Ohos extends OS {
 
 `product` 字段采用 `Map<String, dynamic>` 而非强类型，以支持鸿蒙 build-profile 中任意的扩展字段（如 `buildOption.strictMode`），避免配置项频繁变更导致模型过时。
 
-### 3.3 核心逻辑：product name = flavor key
+### 核心逻辑：product name = flavor key
 
 这是本次适配的最关键设计决策。`OhosProductsProcessor.buildProducts()` 中：
 
@@ -123,7 +127,7 @@ List<Map<String, dynamic>> buildProducts() =>
 
 将 product name 硬绑定为 flavor key（如 `apple`、`banana`），确保与 `flutter run --flavor <key>` 完全对齐。这消除了用户因配置 `ohos.name: "apple_debug"` 而导致 flavor 匹配失败的问题。
 
-### 3.4 JSON5 增量合并算法
+### JSON5 增量合并算法
 
 鸿蒙使用 JSON5 格式的配置文件，合并算法需要处理以下场景：
 
@@ -173,7 +177,7 @@ modules: [{
 
 **targets 深度合并**：使用递归 `mergeNode` 算法处理嵌套对象，`source` 和 `resource` 整体替换（因为它们是由 flavorizr 完全管控的），其他字段递归合并。
 
-### 3.5 资源目录脚手架生成
+### 资源目录脚手架生成
 
 `OhosTargetsTargetFileProcessor` 在写入 targets 后，会为每个 target 创建必要的资源目录结构：
 
@@ -189,9 +193,9 @@ ohos/entry/src/main/apple_debug/resources/
 
 文件夹生成后，因资源文件默认缺省，资源文件需要手动创建。
 
-## 四、使用方式
+## 使用方式
 
-### 4.1 配置 flavorizr.yaml示例
+### 配置 flavorizr.yaml示例
 
 ```yaml
 flavors:
@@ -220,13 +224,13 @@ flavors:
 
 product 和 target 的 `name` 无需手动指定，始终自动取 flavor key（`apple`）。
 
-### 4.2 运行 flavorizr
+### 运行 flavorizr
 
 ```bash
 flutter pub run flutter_flavorizr
 ```
 
-### 4.3 在鸿蒙真机上运行
+### 在鸿蒙真机上运行
 
 ```bash
 # 安装 ohpm 依赖
@@ -243,7 +247,7 @@ cd ..
 flutter run --flavor apple -d <device_id>
 ```
 
-## 五、总结
+## 总结
 
 本次适配的核心成果：
 

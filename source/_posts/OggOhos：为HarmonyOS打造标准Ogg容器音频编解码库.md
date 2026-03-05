@@ -5,6 +5,7 @@ tags:
   - 鸿蒙
   - 音频
   - 编解码
+  - AI辅助创作
 categories: 技术
 ---
 
