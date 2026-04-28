@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"require\\('domhandler'\\); console.log\\('domhandler ok'\\)\")",
+      "Bash(node -e \"require\\('domutils'\\); console.log\\('domutils ok'\\)\")",
+      "Bash(node -e \"require\\('dom-serializer'\\); console.log\\('dom-serializer ok'\\)\")",
+      "Bash(node -e \"const s = require\\('dom-serializer'\\); console.log\\(typeof s.default || typeof s\\)\")",
+      "Bash(node *)",
+      "Bash(npx hexo *)"
+    ]
+  }
+}
