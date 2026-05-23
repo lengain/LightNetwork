@@ -25,6 +25,8 @@ git pull
 
 确保本地 `dev` 分支与远程保持一致。`git pull` 相当于 `git fetch origin dev:dev` + 快进合并，在未偏离远程的前提下不会产生额外提交。
 
+<!--more-->
+
 ### 2. 创建功能分支
 
 ```bash
